@@ -1,0 +1,90 @@
+extends layout
+
+block content
+
+  body#background
+  h1(style='font-size: 400%;')= title
+  p(style='font-size: 200%;') Welcome to #{title} 2020 !
+  p#demo
+  p#today(style='font-size: 150%;')
+  br
+  br
+
+
+  #countdown
+    h1#show_timer(style='text-align:center;')
+    p(style='text-align:center;') Next event is: #{name_of_day}
+    p(style='text-align:center;') Date : #{date_event_format}
+
+  form(action='/' method='get')
+    select(name='event_selected')
+      option(value='christmas')
+        | Christmas
+      option(value='halloween')
+        | Halloween
+      option(value='easter')
+        | Easter
+      option(value='winter')
+        | Winter
+    br
+    br
+    input(type='submit' value='Submit')
+
+  script.
+    // Formatage
+    let time_event = #{time};
+    let isFirstShow = true;
+
+    function format_date(){
+    var time_left_milisecondes = time_event;
+    var time_left_month = new Date(time_left_milisecondes).getMonth();
+    var time_left_days = new Date(time_left_milisecondes).getDate();
+    var time_left_hours = new Date(time_left_milisecondes).getHours();
+    var time_left_min = new Date(time_left_milisecondes).getMinutes();
+    var time_left_seconds = new Date(time_left_milisecondes).getSeconds();
+    var time_left = time_left_month + ' Month(s) ' + time_left_days + ' Day(s) ' + time_left_hours + 'H' + time_left_min + 'min ' + time_left_seconds + 's';
+    return time_left;
+    }
+    var myTimer = setInterval(decrement_time, 1000); // "decrement_time()"+ ()
+
+    function decrement_time() {
+      if(!isFirstShow) {
+      time_event -= 1000;
+      }
+      isFirstShow = false;
+      var time_left = format_date()
+      console.log(time_left)
+      document.getElementById("show_timer").innerHTML = time_left;
+
+      //- actualisation today date
+      let today = new Date();
+      today = today.toString().replace('GMT+0200 (heure d’été d’Europe centrale)', '')
+      document.getElementById("today").innerHTML = today;
+
+    }
+
+  script.
+
+    var date_now = new Date()
+
+    // 12H
+    var hour = date_now.getHours()
+    if (hour === 13) {
+      console.log(hour)
+      var elem = document.createElement("img");
+      elem.setAttribute("src","./images/eat.gif");
+      document.getElementById('background').appendChild(elem);
+      }
+
+    // Halloween
+    if (date_now.getDate() == 31 && date_now.getMonth() == 10 - 1) {
+      var elem = document.createElement("img");
+      elem.setAttribute("src","./images/halloween.gif");
+      document.getElementById('background').appendChild(elem);
+    }
+    // Saint-Valentin
+    if (date_now.getDate() == 3 && date_now.getMonth() == 5 - 1) {
+      var elem = document.createElement("img");
+      elem.setAttribute("src","./images/love.gif");
+      document.getElementById('background').appendChild(elem);
+    }
